@@ -16,7 +16,7 @@
             <form action="#" method="post" class="demoForm" id="demoForm">
                 
                 <label valign="top">Grau da Curva: </label><br>
-                <input type="radio" name="grau" value="1">1
+                <input id="degreeSelector" type="radio" name="grau" checked="checked" value="1">1
                 <input type="radio" name="grau" value="2">2
                 <input  type="radio" name="grau" value="3">3
                 <input  type="radio" name="grau" value="4">4
@@ -28,7 +28,7 @@
                 <input type="radio" name="grau" value="10">10
                 <button onclick='mostrarGrau()' style="color:black"> Mostra valor </button>
                                     
-                <!--
+                
                 <select id="degreeSelector" name="degree">
                     <option value="1" style="color: black">1</option>
                     <option value="2" style="color: black">2</option>
@@ -41,7 +41,7 @@
                     <option value="9" style="color: black">9</option>
                     <option value="10" style="color: black">10</option>
                 </select>
-                -->
+                
                 
             </form>
         </div>
@@ -53,18 +53,16 @@
    
     <script>
         function mostrarGrau(){
-            alert('O valor grau da curva é '+ getRadioValor('grau'));
+            var rates = document.getElementsByName('grau');
+            var rate_value;
+            for(var i = 0; i < rates.length; i++){
+                if(rates[i].checked){
+                    rate_value = rates[i].value;
+                }
+            }
+            document.getElementById("degreeSelector").value = rate_value;
         }
         
-        function getRadioValor(name){
-            var rads = document.getElementsByName(name);
-            
-            for(var i = 0; i < rads.length; i++){
-                if(rads[i].checked){
-                    return rads[i].value;
-                }
-            
-            }
             
             return null;
         }
