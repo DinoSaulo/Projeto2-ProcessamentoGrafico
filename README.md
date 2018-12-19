@@ -2,7 +2,7 @@
 ### Projeto 2ª Unidade - Processamento Gráfico - CIn/UFPE
 
 ### Alunos:
-##### Gabriel Amancio - GAS5
+##### Gabriel Amâncio - GAS5
 ##### Saulo Barros - SAB2
 ##### Anderson Henrrique - AHBS
 
