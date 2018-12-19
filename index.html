@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title></title>
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+    </head>
+
+<body>
+
+    <div id="content">
+        
+    
+        <div id="menu">
+            <h3>Menu</h3>
+    
+            <form action="#" method="post" class="demoForm" id="demoForm">
+                
+                <label valign="top">Grau da Curva: </label><br>
+                <input type="radio" name="grau" value="1">1
+                <input type="radio" name="grau" value="2">2
+                <input  type="radio" name="grau" value="3">3
+                <input  type="radio" name="grau" value="4">4
+                <input type="radio" name="grau" value="5">5
+                <input type="radio" name="grau" value="6">6
+                <input type="radio" name="grau" value="7">7
+                <input type="radio" name="grau" value="8">8
+                <input type="radio" name="grau" value="9">9
+                <input type="radio" name="grau" value="10">10
+                <button onclick='mostrarGrau()' style="color:black"> Mostra valor </button>
+                                    
+                <!--
+                <select id="degreeSelector" name="degree">
+                    <option value="1" style="color: black">1</option>
+                    <option value="2" style="color: black">2</option>
+                    <option value="3" style="color: black">3</option>
+                    <option value="4" style="color: black">4</option>
+                    <option value="5" style="color: black">5</option>
+                    <option value="6" style="color: black">6</option>
+                    <option value="7" style="color: black">7</option>
+                    <option value="8" style="color: black">8</option>
+                    <option value="9" style="color: black">9</option>
+                    <option value="10" style="color: black">10</option>
+                </select>
+                -->
+                
+            </form>
+        </div>
+
+        <div id="container">
+            <canvas id="canvas" width="1000" height="1000"></canvas>
+        </div>
+    </div>
+   
+    <script>
+        function mostrarGrau(){
+            alert('O valor grau da curva é '+ getRadioValor('grau'));
+        }
+        
+        function getRadioValor(name){
+            var rads = document.getElementsByName(name);
+            
+            for(var i = 0; i < rads.length; i++){
+                if(rads[i].checked){
+                    return rads[i].value;
+                }
+            
+            }
+            
+            return null;
+        }
+    </script>
+
+    <script src="js/mathjs-4.4.2/package/dist/math.js"></script>
+    <script src="js/canvas.js"></script>
+    <script src="js/bezier_curve.js"></script>
+    <script src="js/MMQ.js"></script>
+
+ </body>
+
+</html>
