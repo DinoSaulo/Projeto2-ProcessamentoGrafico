@@ -2,7 +2,7 @@ body{
     margin: 0px;
     font-family: 'Roboto', sans-serif;
     color: white;
-    background-color: #dfa5ff;
+    background-color: #afafaf;
 }
 
 
@@ -14,14 +14,14 @@ h3, h4 {
 canvas {
     
     width: 80%;
-    background-color: #fefebe;
+    background-color: #ffffe6;
     border-radius: 25px;
     height: 70vh;
 }
 
 #principal {
     width: 100%;
-    background-color: #dfa5ff;
+    background-color: #afafaf;
     display: flex;
     flex-direction: row;
 }

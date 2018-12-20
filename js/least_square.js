@@ -1,21 +1,7 @@
 
-//Caluclo de a e b na função, fazendo a regra da cadeia
-function sum_pol_a(points, degree) {
-    var res = 0;
-    for (i = 0; i < points.length; i++) {
-        res += Math.pow(points[i].x,degree);
-    }
-    return res;
-}
-
-function sum_pol_b(points, degree) {
-    var res = 0;
-    for (i = 0; i < points.length; i++) {
-        res += Math.pow(points[i].x,degree)*points[i].y;
-    }
-    return res;
-}
-// Função de resolução do método dos quadrados minimos
+// Função de resolução do método dos quadrados mínimos
+// "melhor ajuste para um conjunto de dados tentando minimizar a soma dos quadrados das 
+// diferenças entre o valor estimado e os dados observados"
 function solve_LSM(points, degree) {
     var a = new Array(degree);
     for (var i = 0; i < degree; i++) {
@@ -23,7 +9,7 @@ function solve_LSM(points, degree) {
     }
     for (i = 0; i < degree; i++) {
         for (j = 0; j < degree; j++) {
-            a[i][j] = sum_pol_a(points, i+j);
+            a[i][j] = chain_a(points, i+j,true);
         }
     }
 
@@ -32,7 +18,7 @@ function solve_LSM(points, degree) {
         b[i] = new Array(1);
     }
     for (i = 0; i < degree; i++) {
-        b[i][0] = sum_pol_b(points, i);
+        b[i][0] = chain_a(points, i, false);
     }
 
     var res = math.lusolve(a,b);
@@ -42,13 +28,27 @@ function solve_LSM(points, degree) {
 
     return res.reverse();
 }
+
+//Caluclo de a na função, através da regra da cadeia
+function chain_a(points, degree, aorb) {
+    var res = 0;
+    for (i = 0; i < points.length; i++) {
+        if(aorb == true){
+            res += Math.pow(points[i].x,degree);
+        } else {
+            res += Math.pow(points[i].x,degree)*points[i].y;
+        }
+        
+    }
+    return res;
+}
+
 //Pega a função conseguida no calculo acima e cria a curva no gráfico referente a ela
 function drawFunctionGraph() {
     var xs = [];
     for (x = 0; x < canvas.width; x += 1) {
         xs.push(x);
     }
-
 
     ctx.beginPath();
     for (i = 0; i < xs.length-1; i++) {
