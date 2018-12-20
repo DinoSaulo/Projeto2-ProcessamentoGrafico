@@ -14,7 +14,7 @@ h3, h4 {
 canvas {
     
     width: 80%;
-    background-color: azure;
+    background-color: #fefebe;
     border-radius: 25px;
     height: 70vh;
 }
@@ -116,6 +116,3 @@ select {
     }
   }
 
-  .container {
-     
-}

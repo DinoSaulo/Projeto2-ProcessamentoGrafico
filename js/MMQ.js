@@ -65,7 +65,10 @@ function drawFunctionGraph() {
         ctx.moveTo(xs[i], y0)
         ctx.lineTo(xs[i+1], y1)
     }
-    ctx.strokeStyle = "#91ED80";
-    ctx.lineWidth = "1";
+
+    // Cor da linha out
+    ctx.strokeStyle = "#000000";
+    // comprimnto da linha
+    ctx.lineWidth = "2";
     ctx.stroke();
 }
