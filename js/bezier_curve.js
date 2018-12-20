@@ -1,102 +1,117 @@
-function drawBezierCurve(control_points) {
-    var step = 0.01;
-    var n = control_points.length-1;
-    var points = []
+//Operação de fatorial -> n!
+function CalculoFatorial (n) { if (n == 0) { return 1; } else { return n * CalculoFatorial (n - 1); }}
 
+//Combinação simples -> n!/(n-i)!i!
+function CombinacaoSimplesNi (n, i) {
+    nFat = CalculoFatorial (n);
+    niFat = CalculoFatorial (n-i) * CalculoFatorial (i);
+    return nFat/niFat;
+}
+
+//Polinômio de Bernstein -> Comb.Simples (n,i) * (1 - t)^n-i * t^î 
+function CalculoPolinomioBernstein (t, n, i) { return CombinacaoSimplesNi (n, i) * Math.pow (1 - t, n - i) * Math.pow (t, i); }
+
+//Traça a linha entre os pontos na tela
+function setLineInTheScreen (VectorPoints) {
+    ctx.beginPath ();
+    ctx.moveTo (VectorPoints [0].x, VectorPoints [0].y);
+
+    for (i = 1; i < VectorPoints.length; i++) {
+        ctx.lineTo (VectorPoints [i].x, VectorPoints [i].y);
+        ctx.moveTo (VectorPoints [i].x, VectorPoints [i].y);
+    }
+
+    ctx.strokeStyle = "#007FFF";                //Cor da linha
+    ctx.lineWidth = "2";                        //Espessura da linha
+    ctx.stroke ();
+}
+
+//Algoritmo de DeCasteljau
+function DeCasteljau (p, t, n, VectorControlPoints) {
     for (i = 0; i <= n; i++) {
-        point = control_points[i]
-
-        ctx.beginPath();
-        ctx.moveTo(point.x - 5, point.y);
-        ctx.lineTo(point.x + 5, point.y);
-        ctx.moveTo(point.x, point.y - 5);
-        ctx.lineTo(point.x, point.y + 5);
-        ctx.strokeStyle = "#ED4D41";
-        ctx.lineWidth = "2";
-        ctx.stroke();
+        var Bernstein = CalculoPolinomioBernstein (t, n, i);
+        p.x += Bernstein * VectorControlPoints [i].x;
+        p.y += Bernstein * VectorControlPoints [i].y;
     }
-
-    for (t = 0; t < 1.01; t += step) {
-        var point = {x: 0, y: 0};
-
-        for (i = 0; i <= n; i++) {
-            var B = bernstein(t, n, i);
-            point.x += B * control_points[i].x;
-            point.y += B * control_points[i].y;
-        }
-
-        points.push(point);
-    }
-
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-    for (i = 0; i < points.length - 1; i++) {
-        ctx.lineTo(points[i+1].x, points[i+1].y);
-        ctx.moveTo(points[i+1].x, points[i+1].y);
-    }
-    ctx.strokeStyle = "#69C2EA";
-    ctx.lineWidth = "2";
-    ctx.stroke();
-
-}
-
-function bernstein(t, n, i) {
-    return coeficienteBinomial(n, i) * Math.pow(t, i) * Math.pow(1-t, n-i);
-}
-
-function coeficienteBinomial(n, i) {
-    numerator = factorial(n);
-    denominator = factorial(n-i)*factorial(i);
-    return numerator/denominator;
-}
-
-function factorial(n) {
-    if (n == 0) return 1;
-    return n * factorial(n-1);
-}
-
-function findControlPoints(cs, points) {
-    var n = cs.length-1;
-    points.sort(function(a, b) {
-        return a.x-b.x;
-    });
-
-    var x0 = points[0].x
-    var x_const = points[points.length-1].x - points[0].x;
-
-    var step = 1.0/n;
-
-    var coeficients = [];
-    var results_x = [];
-    var results_y = [];
-    for (t = 0, j = 0; t < 1 + step/2; t += step, j++) {
-        var x = t*x_const + x0;
-        var y = 0;
-        for (i = 0; i <= n; i++) {
-            y += cs[i]*Math.pow(x, n-i);
-        }
-
-        results_x.push(x);
-        results_y.push(y);
-        
-        coeficients.push([]);
-        for (i = 0; i <= n; i++) {
-            coeficients[j].push(bernstein(t, n, i));
-        }
-    }
-
-    console.log("x", coeficients, results_x);
-    console.log("y", coeficients, results_y);
-
-    var x = math.lusolve(coeficients, results_x);
-    var y = math.lusolve(coeficients, results_y);
-
-    var p= []
-    for (i = 0; i < x.length; i++) {
-        p.push({x: x[i][0], y: y[i][0]});
-    }
-
-    console.log("control points", p);
 
     return p;
+}
+
+//Define a curva na tela
+function settingBezierCurve (VectorControlPoints) {
+    var passoLength = 0.005;                    //Tamanho do passo
+    var n = VectorControlPoints.length - 1;     //Grau da curva
+    var VectorPoints = [];                      //Vetor de pontos para formar a linha na tela
+
+    //Cria uma cruz ( 'X' ) no local do ponto
+    for (i = 0; i <= n; i++) {
+        point = VectorControlPoints [i];
+        distance = 5;
+
+        ctx.beginPath ();
+
+        //Movimentação//
+        ctx.moveTo (point.x - distance, point.y - distance);
+        ctx.lineTo (point.x + distance, point.y + distance);
+        ctx.moveTo (point.x + distance, point.y - distance);
+        ctx.lineTo (point.x - distance, point.y + distance);
+        
+        //Cor e espessura da linha//
+        ctx.strokeStyle = "#FF0000";
+        ctx.lineWidth = "2";
+        
+        ctx.stroke ();
+    }
+
+    //Executando DeCasteljau
+    for (t = 0; t <= 1; t += passoLength) {
+        var point = {x: 0, y: 0};
+        
+        point = DeCasteljau (point, t, n, VectorControlPoints);
+
+        VectorPoints.push (point);
+    }
+
+    setLineInTheScreen (VectorPoints);
+}
+
+function discoveringControlPoints (cs, VectorPoints) {
+    var n = cs.length - 1;
+    
+    VectorPoints.sort (function (a, b) { return a.x - b.x; });                                  //Ordena os pontos (Ordem crescente)
+
+    var x0 = VectorPoints [0].x;                                                                //Primeiro ponto
+    var distanceBetweenXiXf = VectorPoints [VectorPoints.length - 1].x - VectorPoints [0].x;    //Distancia em 'X' entre ponto inicial e final
+
+    var passoLength = 1.0/n;                                                                    //Tamanho do passo
+
+    var coeficientsBernstein = [];
+    var VectorX_Coordinate = [];
+    var VectorY_Coordinate = [];
+
+    for (t = 0, j = 0; t <= 1; t += passoLength, j++) {
+        var xCoordinate = t * distanceBetweenXiXf + x0;
+        var yCoordinate = 0;
+        coeficientsBernstein.push ([]);
+
+        for (i = 0; i <= n; i++) {
+            yCoordinate += cs [i] * Math.pow (xCoordinate, n - i);
+
+            coeficientsBernstein [j].push (CalculoPolinomioBernstein (t, n, i));
+        }
+
+        VectorX_Coordinate.push (xCoordinate);
+        VectorY_Coordinate.push (yCoordinate);
+    }
+
+    var VectorX_Weighted = math.lusolve (coeficientsBernstein, VectorX_Coordinate);  //Solução do sistema: "coeficientsBernstein * v = VectorX_Coordinate"
+    var VectorY_Weighted = math.lusolve (coeficientsBernstein, VectorY_Coordinate);  //Solução do sistema: "coeficientsBernstein * v = VectorY_Coordinate"
+
+    var VectorControlPoints = [];
+
+    for (i = 0; i < VectorX_Weighted.length; i++) {
+        VectorControlPoints.push ({x: VectorX_Weighted [i][0], y: VectorY_Weighted [i][0]});
+    }
+
+    return VectorControlPoints;
 }

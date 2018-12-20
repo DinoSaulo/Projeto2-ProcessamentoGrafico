@@ -4,7 +4,7 @@ var ctx = canvas.getContext('2d');
 var point = {
     x: 0,
     y: 0,
-    radius: 3
+    radius: 4
 };
 var move = -1;
 var points = [];
@@ -97,7 +97,7 @@ ctx.lineWidth = 5;
     ctx.beginPath();
    // ctx.strokeStyle = '#9D4B95';
     //ctx.lineWidth = '4';
-    ctx.fillStyle = '#9D4B95';
+    ctx.fillStyle = '#FF00FF';
     ctx.arc(point.x, point.y, point.radius, 0, 2*Math.PI);
     ctx.stroke();
     ctx.fill();
@@ -119,7 +119,7 @@ function draw() {
 
     drawFunctionGraph();
     draw_points();
-    drawBezierCurve(findControlPoints(cs, points));
+    settingBezierCurve (discoveringControlPoints (cs, points));
 }
 
 
