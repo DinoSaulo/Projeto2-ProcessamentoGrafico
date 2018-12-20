@@ -9,7 +9,7 @@ function solve_LSM(points, degree) {
     }
     for (i = 0; i < degree; i++) {
         for (j = 0; j < degree; j++) {
-            a[i][j] = chain_a(points, i+j,true);
+            a[i][j] = chain(points, i+j,true);
         }
     }
 
@@ -18,7 +18,7 @@ function solve_LSM(points, degree) {
         b[i] = new Array(1);
     }
     for (i = 0; i < degree; i++) {
-        b[i][0] = chain_a(points, i, false);
+        b[i][0] = chain(points, i, false);
     }
 
     var res = math.lusolve(a,b);
@@ -30,7 +30,7 @@ function solve_LSM(points, degree) {
 }
 
 //Caluclo de a na função, através da regra da cadeia
-function chain_a(points, degree, aorb) {
+function chain(points, degree, aorb) {
     var res = 0;
     for (i = 0; i < points.length; i++) {
         if(aorb == true){
@@ -38,7 +38,6 @@ function chain_a(points, degree, aorb) {
         } else {
             res += Math.pow(points[i].x,degree)*points[i].y;
         }
-        
     }
     return res;
 }
@@ -50,25 +49,28 @@ function drawFunctionGraph() {
         xs.push(x);
     }
 
+    // Definindo uma "nova" linha
     ctx.beginPath();
+
     for (i = 0; i < xs.length-1; i++) {
-        var y0 = 0;
-        for (j = 0; j < cs.length; j++) {
-            y0 += cs[j]*Math.pow(xs[i], cs.length - j - 1);
+
+        var y = [];
+        y[0] = 0, y[1] = 0; 
+
+        for(j = 0; j < 2; j ++) {
+            for (k = 0; k < cs.length; k++) {
+                y[j] += cs[k]*Math.pow(xs[i + j], cs.length - k - 1); // p/ y[0] j == 0 && y[1] j == 1
+            }
         }
 
-        var y1 = 0;
-        for (j = 0; j < cs.length; j++) {
-            y1 += cs[j]*Math.pow(xs[i+1], cs.length - j - 1);
-        }
-
-        ctx.moveTo(xs[i], y0)
-        ctx.lineTo(xs[i+1], y1)
+        ctx.moveTo(xs[i], y[0])
+        ctx.lineTo(xs[i+1], y[1])
     }
 
-    // Cor da linha out
-    ctx.strokeStyle = "#000000";
-    // comprimnto da linha
+    // Definindo a espessura e cor da linha
     ctx.lineWidth = "2";
+    ctx.strokeStyle = "#000000";
+    
+    // Plotando o Gráfico 
     ctx.stroke();
 }
