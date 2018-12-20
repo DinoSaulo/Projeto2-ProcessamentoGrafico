@@ -81,7 +81,7 @@ select {
   
   .overlay-content {
     position: relative;
-    top: 25%;
+    top: 5%;
     width: 100%;
     text-align: center;
     margin-top: 30px;
@@ -103,7 +103,7 @@ select {
   .overlay .closebtn {
     position: absolute;
     top: 20px;
-    right: 45px;
+    right: 15px;
     font-size: 60px;
   }
   

@@ -115,7 +115,7 @@ function draw_points() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    cs = solve_MMQ(points, degree);
+    cs = solve_LSM(points, degree);
 
     drawFunctionGraph();
     draw_points();
