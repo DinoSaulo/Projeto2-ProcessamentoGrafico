@@ -21,50 +21,50 @@ function solve_LSM(points, degree) {
         b[i][0] = chain(points, i, false);
     }
 
-    var res = math.lusolve(a,b);
-    for (i = 0; i < res.length; i++) {
-        res[i] = res[i][0];
+    var result = math.lusolve(a,b);
+    for (i = 0; i < result.length; i++) {
+        result[i] = result[i][0];
     }
 
-    return res.reverse();
+    return result.reverse();
 }
 
-//Caluclo de a na função, através da regra da cadeia
+//Calculo de a na função, através da regra da cadeia
 function chain(points, degree, aorb) {
-    var res = 0;
+    var result = 0;
     for (i = 0; i < points.length; i++) {
         if(aorb == true){
-            res += Math.pow(points[i].x,degree);
+            result += Math.pow(points[i].x,degree);
         } else {
-            res += Math.pow(points[i].x,degree)*points[i].y;
+            result += Math.pow(points[i].x,degree)*points[i].y;
         }
     }
-    return res;
+    return result;
 }
 
 //Pega a função conseguida no calculo acima e cria a curva no gráfico referente a ela
 function drawFunctionGraph() {
-    var xs = [];
-    for (x = 0; x < canvas.width; x += 1) {
-        xs.push(x);
+    var x = [];
+    for (i = 0; i < canvas.width; i += 1) {
+        x.push(i);
     }
 
     // Definindo uma "nova" linha
     ctx.beginPath();
 
-    for (i = 0; i < xs.length-1; i++) {
+    for (i = 0; i < x.length-1; i++) {
 
         var y = [];
         y[0] = 0, y[1] = 0; 
 
         for(j = 0; j < 2; j ++) {
             for (k = 0; k < cs.length; k++) {
-                y[j] += cs[k]*Math.pow(xs[i + j], cs.length - k - 1); // p/ y[0] j == 0 && y[1] j == 1
+                y[j] += cs[k]*Math.pow(x[i + j], cs.length - k - 1); // p/ y[0] j == 0 && y[1] j == 1
             }
         }
 
-        ctx.moveTo(xs[i], y[0])
-        ctx.lineTo(xs[i+1], y[1])
+        ctx.moveTo(x[i], y[0])
+        ctx.lineTo(x[i+1], y[1])
     }
 
     // Definindo a espessura e cor da linha
